@@ -11,9 +11,9 @@ Operations:
 <img alt="App image" src="documents/screenshots/news_details.jpg" width="30%">
 </div>
 
-```kotlin
-//Entities
+Entities:
 
+```kotlin
 class ResultEntity<T> (
     val code : Int,
     val list : List<T>
@@ -36,7 +36,26 @@ class NewsEntity (
     val code : Int,
     val news : News
 )
+```
 
+Interface:
+
+```kotlin
+interface NewsApi {
+
+    @GET("/v1/news/categories")
+    fun requestCategories() : Single<Response<ResultEntity<Category>>>
+
+    @GET("/v1/news/categories/{id}/news")
+    fun requestCategory(
+        @Path("id") id : Int,
+        @Query("page") page : Int
+    ) : Single<Response<ResultEntity<News>>>
+
+    @GET("/v1/news/details")
+    fun requestNewsDetails(@Query("id") id : Int) : Single<Response<NewsEntity>>
+
+}
 ```
 
 <a href='http://testtask.sebbia.com/swagger-ui.html'>Swagger</a>
