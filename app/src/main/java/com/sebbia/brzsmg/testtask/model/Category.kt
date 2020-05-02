@@ -3,7 +3,7 @@ package com.sebbia.brzsmg.testtask.model
 /**
  * Сущность категории.
  */
-class Category {
-    var id : Int? = null
-    var name : String? = null
-}
+class Category(
+    val id : Int,
+    val name : String
+)

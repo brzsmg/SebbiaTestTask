@@ -14,28 +14,28 @@ Operations:
 ```kotlin
 //Entities
 
-class ResultEntity<T> {
-    var code : Int? = null
-    var list : List<T>? = null
-}
+class ResultEntity<T> (
+    val code : Int,
+    val list : List<T>
+)
 
-class Category {
-    var id : Int? = null
-    var name : String? = null
-}
+class Category(
+    val id : Int,
+    val name : String
+)
 
-class News {
-    var id: Int? = null
-    var date: DateTime? = null
-    var fullDescription: String? = null
-    var shortDescription: String? = null
-    var title: String? = null
-}
+class News (
+    val id: Int,
+    val date: DateTime,
+    val fullDescription: String,
+    val shortDescription: String,
+    val title: String
+)
 
-class NewsEntity {
-    var code : Int? = null
-    var news : News? = null
-}
+class NewsEntity (
+    val code : Int,
+    val news : News
+)
 
 ```
 

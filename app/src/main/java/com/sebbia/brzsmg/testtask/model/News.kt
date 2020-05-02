@@ -5,10 +5,10 @@ import com.sebbia.brzsmg.testtask.types.DateTime
 /**
  * Сущность новости.
  */
-class News {
-    var id: Int? = null
-    var date: DateTime? = null
-    var fullDescription: String? = null
-    var shortDescription: String? = null
-    var title: String? = null
-}
+class News (
+    val id: Int,
+    val date: DateTime,
+    val fullDescription: String,
+    val shortDescription: String,
+    val title: String
+)

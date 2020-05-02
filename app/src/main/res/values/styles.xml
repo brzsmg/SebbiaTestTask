@@ -8,4 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ListCard">
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:elevation">5dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/bg_list_card</item>
+    </style>
+
 </resources>

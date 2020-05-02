@@ -1,4 +1,4 @@
-package com.uralkali.client
+package com.sebbia.brzsmg.testtask
 
 import com.google.gson.*
 import com.sebbia.brzsmg.testtask.types.DateTime
