@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.item_news.view.*
  * Адаптер для новостей.
  */
 class NewsAdapter(
-    var context: Context,
     private var data: List<News>,
     private val onNewsSelected: (news: News) -> Unit) : RecyclerView.Adapter<NewsHolder>() {
 

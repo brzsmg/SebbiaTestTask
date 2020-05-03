@@ -41,7 +41,7 @@ class NewsListFragment(val category : Category) : Fragment() {
         mLayoutManager = LinearLayoutManager(activity)
         mvList.layoutManager = mLayoutManager
 
-        mAdapter = NewsAdapter(this.requireContext(), mData) { news ->
+        mAdapter = NewsAdapter(mData) { news ->
             (activity as FragmentsActivity).setNextFragment(NewsDetails(category, news))
         }
         mvList.adapter = mAdapter

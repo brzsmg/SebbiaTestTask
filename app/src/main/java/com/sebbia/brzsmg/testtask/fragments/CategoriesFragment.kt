@@ -30,7 +30,7 @@ class CategoriesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         activity?.setTitle("Категории")
-        val view = inflater.inflate(R.layout.fragment_categories, container, false)
+        val view = inflater.inflate(R.layout.fragment_categoriy_list, container, false)
         mvList = view.findViewById(R.id.list)
         mvList.layoutManager = LinearLayoutManager(activity)
         return view
@@ -43,7 +43,7 @@ class CategoriesFragment : Fragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe ({ result ->
                 if(result.isSuccessful) {
-                    val adapter = CategoryAdapter(this.requireContext(), result.body()?.list as List<Category>) { category ->
+                    val adapter = CategoryAdapter(result.body()?.list as List<Category>) { category ->
                         (activity as FragmentsActivity).setNextFragment(NewsListFragment(category))
                         //Toast.makeText(activity, response.name, Toast.LENGTH_SHORT).show()
                     }

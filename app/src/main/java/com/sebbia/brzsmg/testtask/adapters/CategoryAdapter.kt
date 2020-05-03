@@ -13,7 +13,6 @@ import com.sebbia.brzsmg.testtask.model.Category
  * Адаптер для категорий.
  */
 class CategoryAdapter(
-    var context: Context,
     private var data: List<Category>,
     private val onCategorySelected: (category: Category) -> Unit) : RecyclerView.Adapter<CategoryHolder>() {
 
