@@ -2,8 +2,8 @@
 
 - [Operations](#operations)
 - [Screenshots](#screenshots)
-- [Portrait](#portrait)
-- [Landscape](#landscape)
+  - [Portrait](#portrait)
+  - [Landscape](#landscape)
 - [Entities](#entities)
 - [Interface](#interface)
 - [Links](#links)
