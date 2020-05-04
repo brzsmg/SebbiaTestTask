@@ -1,16 +1,27 @@
 # Test task for Sebbia
 
-<h3>Operations</h3>
+- [Operations](#operations)
+- [Screenshots](#screenshots)
+- [Portrait](#portrait)
+- [Landscape](#landscape)
+- [Entities](#entities)
+- [Interface](#interface)
+- [Links](#links)
+
+<h2>Operations</h2>
 <p><b>GET</b> /v1/news/categories</p>
 <p><b>GET</b> /v1/news/categories/{id}/news</p>
 <p><b>GET</b> /v1/news/details</p>
 
-<h3>Screenshots</h3>
+<h2>Screenshots</h2>
+<p>Screenshots in full resolution</p>
+<h3>Portrait </h3>
 <div style="display:flex;">
 <img alt="App image" src="documents/screenshots/categories.jpg" width="30%">
 <img alt="App image" src="documents/screenshots/news_list.jpg" width="30%">
 <img alt="App image" src="documents/screenshots/news_details.jpg" width="30%">
 </div>
+<h3>Landscape</h3>
 <div>
 <p><img alt="App image" src="documents/screenshots/server_unavailable.jpg" width="100%"></p>
 <p><img alt="App image" src="documents/screenshots/refresh.jpg"></p>
