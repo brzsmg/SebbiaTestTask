@@ -15,6 +15,7 @@ import com.sebbia.brzsmg.testtask.app
 import com.sebbia.brzsmg.testtask.model.Category
 import com.sebbia.brzsmg.testtask.ui.FragmentsActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 /**
@@ -22,14 +23,18 @@ import io.reactivex.schedulers.Schedulers
  */
 class CategoriesFragment : Fragment() {
 
-    lateinit var mvList : RecyclerView
+    //Views
+    private lateinit var mvList : RecyclerView
+
+    //Data
+    private var mRequest : Disposable? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        activity?.setTitle("Категории")
+        activity?.title = "Категории"
         val view = inflater.inflate(R.layout.fragment_categoriy_list, container, false)
         mvList = view.findViewById(R.id.list)
         mvList.layoutManager = LinearLayoutManager(activity)
@@ -38,14 +43,14 @@ class CategoriesFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val observer = app.newsApi.requestCategories()
+        mRequest?.dispose()
+        mRequest = app.newsApi.requestCategories()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe ({ result ->
                 if(result.isSuccessful) {
                     val adapter = CategoryAdapter(result.body()?.list as List<Category>) { category ->
-                        (activity as FragmentsActivity).setNextFragment(NewsListFragment(category))
-                        //Toast.makeText(activity, response.name, Toast.LENGTH_SHORT).show()
+                        (activity as FragmentsActivity).setNextFragment(NewsListFragment.newInstance(category))
                     }
                     mvList.adapter = adapter
                     adapter.notifyDataSetChanged()

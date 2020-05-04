@@ -3,7 +3,6 @@ package com.sebbia.brzsmg.testtask
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.facebook.stetho.Stetho
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.sebbia.brzsmg.testtask.server.NewsApi

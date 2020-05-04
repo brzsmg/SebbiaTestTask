@@ -14,27 +14,52 @@ import com.sebbia.brzsmg.testtask.app
 import com.sebbia.brzsmg.testtask.model.Category
 import com.sebbia.brzsmg.testtask.model.News
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 /**
  * Фрагмент подробного описания новости.
  */
-class NewsDetails(
-    val category : Category,
-    val news : News
-) : Fragment() {
-    lateinit var mvCategoryName : TextView
-    lateinit var mvDate : TextView
-    lateinit var mvTitle : TextView
-    lateinit var mvShortDescription : TextView
-    lateinit var mvFullDescription : TextView
+class NewsDetails : Fragment() {
+
+    //Parameters
+    private lateinit var mCategory : Category
+    private lateinit var mNews : News
+
+    //Views
+    private lateinit var mvCategoryName : TextView
+    private lateinit var mvDate : TextView
+    private lateinit var mvTitle : TextView
+    private lateinit var mvShortDescription : TextView
+    private lateinit var mvFullDescription : TextView
+
+    //Data
+    private var mRequest : Disposable? = null
+
+
+
+    companion object {
+        fun newInstance(category : Category, news : News) : NewsDetails {
+            val fragment = NewsDetails()
+            val arguments = Bundle()
+            arguments.putSerializable("category", category)
+            arguments.putSerializable("news", news)
+            fragment.arguments = arguments
+            return fragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        activity?.setTitle("Подробности")
+        if (arguments != null) {
+            mCategory = arguments?.getSerializable("category") as Category
+            mNews = arguments?.getSerializable("news") as News
+        }
+
+        activity?.title = "Подробности"
         val view = inflater.inflate(R.layout.fragment_news_details, container, false)
         mvCategoryName = view.findViewById(R.id.category_name)
         mvDate = view.findViewById(R.id.date)
@@ -42,20 +67,22 @@ class NewsDetails(
         mvShortDescription = view.findViewById(R.id.short_description)
         mvFullDescription = view.findViewById(R.id.full_description)
         mvFullDescription.movementMethod = LinkMovementMethod.getInstance()
+
         return view
     }
 
     override fun onStart() {
         super.onStart()
-        mvCategoryName.text = category.name
-        mvDate.text = news.date?.toFormat("dd.MM.yyyy hh:mm")
-        mvTitle.text = news.title
-        mvShortDescription.text = news.shortDescription
-        requestData()
+        mvCategoryName.text = mCategory.name
+        mvDate.text = mNews.date.toFormat("dd.MM.yyyy hh:mm")
+        mvTitle.text = mNews.title
+        mvShortDescription.text = mNews.shortDescription
+        executeRequest()
     }
 
-    fun requestData() {
-        val observer = app.newsApi.requestNewsDetails(news.id!!)
+    private fun executeRequest() {
+        mRequest?.dispose()
+        mRequest = app.newsApi.requestNewsDetails(mNews.id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe ({ result ->
@@ -63,7 +90,6 @@ class NewsDetails(
                     if(result.body()?.news != null) {
                         val html = Html.fromHtml(result.body()?.news?.fullDescription, Html.FROM_HTML_MODE_COMPACT)
                         mvFullDescription.text = html
-
                     }
                 } else {
                     Toast.makeText(activity,"Ошибка.", Toast.LENGTH_SHORT).show()
