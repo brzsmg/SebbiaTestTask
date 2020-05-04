@@ -10,6 +10,11 @@ Operations:
 <img alt="App image" src="documents/screenshots/news_list.jpg" width="30%">
 <img alt="App image" src="documents/screenshots/news_details.jpg" width="30%">
 </div>
+<div style="display:flex;">
+<img alt="App image" src="documents/screenshots/server_unavailable.jpg" width="30%">
+<img alt="App image" src="documents/screenshots/refresh.jpg" width="30%">
+<img alt="App image" src="documents/screenshots/toast.jpg" width="30%">
+</div>
 
 Entities:
 

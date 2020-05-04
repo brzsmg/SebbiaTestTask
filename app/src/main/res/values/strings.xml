@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SebbiaTestTask</string>
     <string name="empty" translatable="false" />
-    <string name="server_unavailable">Error.\r\nCheck your network connection.</string>
+    <string name="server_unavailable">Error.\nCheck your network connection.</string>
     <string name="exception_of">Exception: %s</string>
 </resources>

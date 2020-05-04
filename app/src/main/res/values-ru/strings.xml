@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SebbiaTestTask</string>
-    <string name="server_unavailable">Ошибка.\r\nПроверьте подключение к сети.</string>
+    <string name="server_unavailable">Ошибка.\nПроверьте подключение к сети.</string>
     <string name="exception_of">Исключение: %s</string>
 </resources>
