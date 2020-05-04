@@ -1,19 +1,20 @@
 # Test task for Sebbia
 
-Operations:
+<h3>Operations</h3>
 <p><b>GET</b> /v1/news/categories</p>
 <p><b>GET</b> /v1/news/categories/{id}/news</p>
 <p><b>GET</b> /v1/news/details</p>
 
+<h3>Screenshots</h3>
 <div style="display:flex;">
 <img alt="App image" src="documents/screenshots/categories.jpg" width="30%">
 <img alt="App image" src="documents/screenshots/news_list.jpg" width="30%">
 <img alt="App image" src="documents/screenshots/news_details.jpg" width="30%">
 </div>
-<div style="display:flex;">
-<img alt="App image" src="documents/screenshots/server_unavailable.jpg" width="30%">
-<img alt="App image" src="documents/screenshots/refresh.jpg" width="30%">
-<img alt="App image" src="documents/screenshots/toast.jpg" width="30%">
+<div>
+<p><img alt="App image" src="documents/screenshots/server_unavailable.jpg" width="100%"></p>
+<p><img alt="App image" src="documents/screenshots/refresh.jpg"></p>
+<p><img alt="App image" src="documents/screenshots/toast.jpg"></p>
 </div>
 
 Entities:
