@@ -1,9 +1,9 @@
 package com.sebbia.brzsmg.testtask.server
 
-import com.sebbia.brzsmg.testtask.model.Category
-import com.sebbia.brzsmg.testtask.model.News
-import com.sebbia.brzsmg.testtask.model.NewsEntity
-import com.sebbia.brzsmg.testtask.model.ResultEntity
+import com.sebbia.brzsmg.testtask.models.Category
+import com.sebbia.brzsmg.testtask.models.News
+import com.sebbia.brzsmg.testtask.models.NewsEntity
+import com.sebbia.brzsmg.testtask.models.ResultEntity
 import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.GET

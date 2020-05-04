@@ -1,47 +1,45 @@
 package com.sebbia.brzsmg.testtask.types
-//package com.swlibs.common.types
+//package com.swlibs.kotlin-common.types
 
-import java.text.ParseException
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
  * Класс для работы с датой и временем, взамен кривого стандартного в старых версиях Java.
- * TODO: Сконвертирован из Java.
  *
  * @author brzsmg
  */
-class DateTime {
-    var systemType: Date? = null
-        private set
-    private var mFormatUTC: SimpleDateFormat? = null
+class DateTime : Serializable {
+    private var mSystemDate: Date
+    private lateinit var mFormatUTC: SimpleDateFormat
     private fun initFormat() {
         mFormatUTC = SimpleDateFormat(
-            pattern2,
+            PATTERN_UTC,
             Locale.getDefault()
         )
-        mFormatUTC!!.timeZone = TimeZone.getTimeZone("GMT")
-        /*mFormatSql = new SimpleDateFormat(patternSql);
-        mFormatSql.setTimeZone(TimeZone.getTimeZone("Asia/Yekaterinburg"));*/
+        mFormatUTC.timeZone = TimeZone.getTimeZone("GMT")
     }
 
     constructor() {
         initFormat()
-        systemType = Date()
+        mSystemDate = Date()
     }
 
-    constructor(date: String?) {
+    constructor(date: String) {
         initFormat()
-        try {
-            systemType = mFormatUTC!!.parse(date)
-        } catch (e: ParseException) {
-            systemType = Date()
-        }
+        mSystemDate = mFormatUTC.parse(date) as Date
     }
 
-    //TODO: isToday для какой timeZone?
-    val isToday: Boolean
-        get() {
+    constructor(date: String, customPattern : String) {
+        initFormat()
+        val customFormat = SimpleDateFormat(customPattern, Locale.getDefault())
+        customFormat.timeZone = TimeZone.getTimeZone("GMT")
+        mSystemDate = customFormat.parse(date) as Date
+    }
+
+    //TODO: isToday только для UTC
+    fun isToday(): Boolean {
             val c = Calendar.getInstance()
             c[Calendar.HOUR_OF_DAY] = 0
             c[Calendar.MINUTE] = 0
@@ -50,39 +48,43 @@ class DateTime {
             val today = c.time
             val todayInMillis = c.timeInMillis
             val c2 = Calendar.getInstance()
-            c2.time = systemType
+            c2.time = mSystemDate
             c2[Calendar.HOUR_OF_DAY] = 0
             c2[Calendar.MINUTE] = 0
             c2[Calendar.SECOND] = 0
             c2[Calendar.MILLISECOND] = 0
             val inMillis = c2.timeInMillis
             return todayInMillis == inMillis
-        }
+    }
 
-    val time: Long
-        get() = systemType!!.time
+    val timestamp: Long
+        get() = mSystemDate.time
 
     override fun toString(): String {
-        //return String.format("%1$tY-%1$tm-%1$tdT%1$tT", mDate);
-        return mFormatUTC!!.format(systemType)
+        return mFormatUTC.format(mSystemDate)
     }
 
     fun getDifference(date: DateTime): Long {
-        return date.time - systemType!!.time
+        return date.timestamp - mSystemDate.time
     }
 
-    fun toFormat(format: String?): String {
-        return SimpleDateFormat(format, Locale.getDefault()).format(systemType)
+    fun toFormat(format: String): String {
+        return SimpleDateFormat(format, Locale.getDefault()).format(mSystemDate)
+    }
+
+    fun toFormat(format: String, timeZone : TimeZone): String {
+        val dateFormat = SimpleDateFormat(format, Locale.getDefault())
+        dateFormat.timeZone = timeZone
+        return dateFormat.format(mSystemDate)
     }
 
     companion object {
-        //YYYY-MM-DD HH24:MI:SS
-        private const val pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-        private const val pattern2 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        //private SimpleDateFormat mFormatSql;
-        //final static String patternText = "dd.MM.yyyy HH:mm:ss";
-        //final static String patternSql = "yyyy-MM-dd HH:mm:ss";
+        const val PATTERN_UTC = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        const val PATTERN_SSS = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        const val patternText = "dd.MM.yyyy HH:mm:ss";
+        const val patternSql = "yyyy-MM-dd HH:mm:ss";
+        const val patternOracle = "YYYY-MM-DD HH24:MI:SS"
         const val patternFileName = "yyyyMMdd_HHmmss"
-
+        val TIMEZONE_YEKATERINBURG = TimeZone.getTimeZone("Asia/Yekaterinburg")
     }
 }

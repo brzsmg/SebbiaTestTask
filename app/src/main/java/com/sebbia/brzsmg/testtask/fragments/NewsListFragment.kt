@@ -5,19 +5,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.sebbia.brzsmg.testtask.R
 import com.sebbia.brzsmg.testtask.adapters.NewsAdapter
 import com.sebbia.brzsmg.testtask.app
-import com.sebbia.brzsmg.testtask.model.Category
-import com.sebbia.brzsmg.testtask.model.News
+import com.sebbia.brzsmg.testtask.models.Category
+import com.sebbia.brzsmg.testtask.models.News
 import com.sebbia.brzsmg.testtask.ui.FragmentsActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.io.IOException
 
 /**
  * Фрагмент списка новостей.
@@ -28,14 +32,16 @@ class NewsListFragment : Fragment() {
     //Parameters
     private lateinit var mCategory : Category
 
-    //Views
+    //Views and Adapters
+    private lateinit var mvRefreshList : SwipeRefreshLayout
+    private lateinit var mvMessage : TextView
     private lateinit var mvList : RecyclerView
     private lateinit var mLayoutManager : LinearLayoutManager
+    private lateinit var mAdapter : NewsAdapter
 
     //Data
-    private var mRequest : Disposable? = null
     private var mData : ArrayList<News> = ArrayList()
-    private lateinit var mAdapter : NewsAdapter
+    private var mRequest : Disposable? = null
     private var mPage : Int = 0
     private var mLoading : Boolean = false
 
@@ -58,8 +64,18 @@ class NewsListFragment : Fragment() {
         if (arguments != null) {
             mCategory = arguments?.getSerializable("category") as Category
         }
+        if(savedInstanceState != null) {
+            @Suppress("UNCHECKED_CAST")
+            val data = savedInstanceState.getSerializable("data") as ArrayList<News>
+            mData.addAll(data)
+            mPage = savedInstanceState.getInt("page")
+            mLoading = savedInstanceState.getBoolean("loading")
+        }
+
         activity?.title = mCategory.name
         val view = inflater.inflate(R.layout.fragment_news_list, container, false)
+        mvRefreshList = view.findViewById(R.id.refresh_list)
+        mvMessage = view.findViewById(R.id.message)
         mvList = view.findViewById(R.id.list)
         mLayoutManager = LinearLayoutManager(activity)
         mvList.layoutManager = mLayoutManager
@@ -69,7 +85,21 @@ class NewsListFragment : Fragment() {
         }
         mvList.adapter = mAdapter
 
+        mvRefreshList.setOnRefreshListener {
+            mData.clear()
+            mAdapter.notifyDataSetChanged()
+            mPage = 0
+            requestNextPage()
+        }
+
         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable("data", mData)
+        outState.putInt("page", mPage)
+        outState.putBoolean("loading", mLoading)
     }
 
     override fun onStart() {
@@ -83,7 +113,12 @@ class NewsListFragment : Fragment() {
                 }
             }
         })
-        requestNextPage()
+        if(mPage == 0) {
+            requestNextPage()
+        } else {
+            mvMessage.visibility = View.GONE
+            mvList.visibility = View.VISIBLE
+        }
     }
 
     fun requestNextPage() {
@@ -94,6 +129,13 @@ class NewsListFragment : Fragment() {
             return
         }
         mLoading = true
+
+        mvMessage.text = ""
+        mvRefreshList.isRefreshing = true
+        if(mPage  < 1) {
+            mvMessage.visibility = View.VISIBLE
+            mvList.visibility = View.GONE
+        }
         Log.i("PAGINATION", "Запос страницы $mPage")
         mRequest?.dispose()
         mRequest = app.newsApi.requestCategory(mCategory.id, mPage)
@@ -103,22 +145,36 @@ class NewsListFragment : Fragment() {
                 if(result.isSuccessful) {
                     val list = result.body()?.list!!
                     if(list.count() > 0) {
-                        mPage++
                         val start = mData.count()
                         mData.addAll(list)
                         mAdapter.notifyItemRangeInserted(start, list.count())
+                        mPage++
                     } else {
-                        mPage = -1
                         Toast.makeText(activity,"Данных больше нет.", Toast.LENGTH_SHORT).show()
+                        mPage = -1
                     }
                 } else {
                     Toast.makeText(activity,"Ошибка.", Toast.LENGTH_SHORT).show()
                 }
                 mLoading = false
+                mvRefreshList.isRefreshing = false
+                if(mvMessage.isVisible) {
+                    mvMessage.visibility = View.GONE
+                    mvList.visibility = View.VISIBLE
+                }
             }, { error ->
-                Toast.makeText(activity,"Исключение: " + error.javaClass.simpleName, Toast.LENGTH_SHORT).show()
-                error.printStackTrace()
+                if(error is IOException) {
+                    mvMessage.setText(R.string.server_unavailable)
+                } else {
+                    Log.e("API", "Исключение: " + error.javaClass.simpleName)
+                    if (error.message != null) {
+                        Log.e("API", error.message as String)
+                    }
+                    error.printStackTrace()
+                    mvMessage.text = getString(R.string.exception_of, error.javaClass.simpleName)
+                }
                 mLoading = false
+                mvRefreshList.isRefreshing = false
             })
 
     }

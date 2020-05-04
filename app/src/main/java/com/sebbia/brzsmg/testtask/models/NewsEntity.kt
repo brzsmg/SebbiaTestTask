@@ -1,4 +1,4 @@
-package com.sebbia.brzsmg.testtask.model
+package com.sebbia.brzsmg.testtask.models
 
 /**
  * Результат API, с подробной информацией о новости.

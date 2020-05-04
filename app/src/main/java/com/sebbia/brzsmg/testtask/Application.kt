@@ -1,19 +1,15 @@
 package com.sebbia.brzsmg.testtask
 
-
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.facebook.stetho.Stetho
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.sebbia.brzsmg.testtask.server.NewsApi
+import com.sebbia.brzsmg.testtask.utils.Json
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-
-val AppCompatActivity.app : Application
-    get() = this.application as Application
 
 val Fragment.app : Application
     get() = this.activity?.application as Application
@@ -38,7 +34,7 @@ class Application : android.app.Application() {
             .retryOnConnectionFailure(false)
             .build()
         val retrofit = Retrofit.Builder()
-            .client(hsHttpClient)
+            .client(hsHttpClient!!)
             .baseUrl("http://testtask.sebbia.com")
             .addConverterFactory(GsonConverterFactory.create(Json.gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

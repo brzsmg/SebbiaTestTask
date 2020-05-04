@@ -1,4 +1,4 @@
-package com.sebbia.brzsmg.testtask
+package com.sebbia.brzsmg.testtask.utils
 
 import com.google.gson.*
 import com.sebbia.brzsmg.testtask.types.DateTime
@@ -29,16 +29,17 @@ object Json {
             .registerTypeAdapter(
                 DateTime::class.java,
                 JsonSerializer<Any> { json, typeOfSrc, context -> JsonPrimitive(json.toString()) })
-            .registerTypeAdapter(DateTime::class.java,
-                JsonDeserializer<Any> { json, typeOfT, context -> DateTime(json.asString) }) //.registerTypeAdapter(DateTime.class, new DateTimeAdapter())
+            .registerTypeAdapter(
+                DateTime::class.java,
+                JsonDeserializer<Any> { json, typeOfT, context -> DateTime(json.asString, DateTime.PATTERN_SSS) }) //.registerTypeAdapter(DateTime.class, new DateTimeAdapter())
             .setLenient()
             .create()
     }
 
-    val gson: Gson?
+    val gson: Gson
         get() {
             init()
-            return mGson
+            return mGson!!
         }
 
     fun <T> fromJson(json: String?, c: Class<T>?): T {

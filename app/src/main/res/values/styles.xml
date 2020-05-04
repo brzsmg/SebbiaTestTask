@@ -17,4 +17,28 @@
         <item name="android:background">@drawable/bg_list_card</item>
     </style>
 
+    <style name="ListText">
+        <item name="android:textColor">@color/colorListText</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_marginStart">10dp</item>
+    </style>
+
+    <style name="RefreshMessage">
+        <item name="android:textColor">@color/colorListText</item>
+        <item name="android:textSize">22sp</item>
+        <!--item name="android:fontFamily"></item-->
+    </style>
+
+    <style name="TextNormal">
+        <item name="android:textColor">@color/colorListText</item>
+        <!--item name="android:fontFamily"></item-->
+    </style>
+
+    <style name="TextHtml">
+        <item name="android:textColor">@color/colorListText</item>
+        <item name="android:textColorLink">@color/colorLink</item>
+        <item name="android:textSize">18sp</item>
+        <!--item name="android:fontFamily"></item-->
+    </style>
+
 </resources>

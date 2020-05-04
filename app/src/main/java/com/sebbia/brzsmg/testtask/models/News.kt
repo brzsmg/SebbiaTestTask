@@ -1,4 +1,4 @@
-package com.sebbia.brzsmg.testtask.model
+package com.sebbia.brzsmg.testtask.models
 
 import com.sebbia.brzsmg.testtask.types.DateTime
 import java.io.Serializable
@@ -9,7 +9,7 @@ import java.io.Serializable
 class News (
     val id: Int,
     val date: DateTime,
-    val fullDescription: String,
+    val title: String,
     val shortDescription: String,
-    val title: String
+    val fullDescription: String?
 ) : Serializable

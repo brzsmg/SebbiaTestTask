@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sebbia.brzsmg.testtask.R
-import com.sebbia.brzsmg.testtask.model.Category
+import com.sebbia.brzsmg.testtask.models.Category
 
 /**
  * Адаптер для категорий.
