@@ -13,6 +13,8 @@ class MainActivity : FragmentsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setNextFragment(CategoriesFragment())
+        if(savedInstanceState == null) {
+            setNextFragment(CategoriesFragment())
+        }
     }
 }

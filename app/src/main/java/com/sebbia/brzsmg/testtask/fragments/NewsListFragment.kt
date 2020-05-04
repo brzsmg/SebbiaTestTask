@@ -16,33 +16,56 @@ import com.sebbia.brzsmg.testtask.model.Category
 import com.sebbia.brzsmg.testtask.model.News
 import com.sebbia.brzsmg.testtask.ui.FragmentsActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 /**
  * Фрагмент списка новостей.
  * С пагинацией.
  */
-class NewsListFragment(val category : Category) : Fragment() {
-    lateinit var mvList : RecyclerView
-    lateinit var mLayoutManager : LinearLayoutManager
-    var mData : ArrayList<News> = ArrayList()
-    lateinit var mAdapter : NewsAdapter
-    var page : Int = 0
-    var loading : Boolean = false
+class NewsListFragment : Fragment() {
+
+    //Parameters
+    private lateinit var mCategory : Category
+
+    //Views
+    private lateinit var mvList : RecyclerView
+    private lateinit var mLayoutManager : LinearLayoutManager
+
+    //Data
+    private var mRequest : Disposable? = null
+    private var mData : ArrayList<News> = ArrayList()
+    private lateinit var mAdapter : NewsAdapter
+    private var mPage : Int = 0
+    private var mLoading : Boolean = false
+
+
+    companion object {
+        fun newInstance(category : Category) : NewsListFragment {
+            val fragment = NewsListFragment()
+            val arguments = Bundle()
+            arguments.putSerializable("category", category)
+            fragment.arguments = arguments
+            return fragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        activity?.setTitle(category.name)
+        if (arguments != null) {
+            mCategory = arguments?.getSerializable("category") as Category
+        }
+        activity?.title = mCategory.name
         val view = inflater.inflate(R.layout.fragment_news_list, container, false)
         mvList = view.findViewById(R.id.list)
         mLayoutManager = LinearLayoutManager(activity)
         mvList.layoutManager = mLayoutManager
 
-        mAdapter = NewsAdapter(this.requireContext(), mData) { news ->
-            (activity as FragmentsActivity).setNextFragment(NewsDetails(category, news))
+        mAdapter = NewsAdapter(mData) { news ->
+            (activity as FragmentsActivity).setNextFragment(NewsDetails.newInstance(mCategory, news))
         }
         mvList.adapter = mAdapter
 
@@ -64,35 +87,38 @@ class NewsListFragment(val category : Category) : Fragment() {
     }
 
     fun requestNextPage() {
-        if(page < 0) {
+        if(mPage < 0) {
             return
         }
-        if(loading) {
+        if(mLoading) {
             return
         }
-        loading = true
-        Log.i("PAGINATION","Запос страницы " + page)
-        val observer = app.newsApi.requestCategory(category.id!!, page)
+        mLoading = true
+        Log.i("PAGINATION", "Запос страницы $mPage")
+        mRequest?.dispose()
+        mRequest = app.newsApi.requestCategory(mCategory.id, mPage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe ({ result ->
                 if(result.isSuccessful) {
-                    if(result.body()?.list!!.count() > 0) {
-                        page++
-                        mData.addAll(result.body()?.list!!)
-                        mAdapter.notifyDataSetChanged() //TODO: не оптимальное использование notify
+                    val list = result.body()?.list!!
+                    if(list.count() > 0) {
+                        mPage++
+                        val start = mData.count()
+                        mData.addAll(list)
+                        mAdapter.notifyItemRangeInserted(start, list.count())
                     } else {
-                        page = -1
+                        mPage = -1
                         Toast.makeText(activity,"Данных больше нет.", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(activity,"Ошибка.", Toast.LENGTH_SHORT).show()
                 }
-                loading = false
+                mLoading = false
             }, { error ->
                 Toast.makeText(activity,"Исключение: " + error.javaClass.simpleName, Toast.LENGTH_SHORT).show()
                 error.printStackTrace()
-                loading = false
+                mLoading = false
             })
 
     }

@@ -1,5 +1,6 @@
 package com.sebbia.brzsmg.testtask.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -12,12 +13,12 @@ import com.sebbia.brzsmg.testtask.R
  * Обрывок из FragmentsActivity.
  * TODO: Сконвертирован из Java.
  */
+@SuppressLint("Registered")
 open class FragmentsActivity : AppCompatActivity() {
     protected var fragmentManager: FragmentManager = this.supportFragmentManager
     protected var mCurrentFragment: Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
     }
 
@@ -27,8 +28,8 @@ open class FragmentsActivity : AppCompatActivity() {
 
     fun setFragment(fragment: Fragment) {
         var currentFragment: Fragment? = null
-        if (fragmentManager.getFragments().size > 0) {
-            currentFragment = fragmentManager.getFragments().get(0)
+        if (fragmentManager.fragments.size > 0) {
+            currentFragment = fragmentManager.fragments.get(0)
             Log.i(
                 "fragment",
                 "[" + fragmentManager.fragments.size

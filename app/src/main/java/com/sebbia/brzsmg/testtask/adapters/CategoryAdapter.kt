@@ -1,6 +1,5 @@
 package com.sebbia.brzsmg.testtask.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import com.sebbia.brzsmg.testtask.model.Category
  * Адаптер для категорий.
  */
 class CategoryAdapter(
-    var context: Context,
     private var data: List<Category>,
     private val onCategorySelected: (category: Category) -> Unit) : RecyclerView.Adapter<CategoryHolder>() {
 

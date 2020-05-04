@@ -58,4 +58,5 @@ interface NewsApi {
 }
 ```
 
-<a href='http://testtask.sebbia.com/swagger-ui.html'>Swagger</a>
+Links:
+<p><a href='http://testtask.sebbia.com/swagger-ui.html'>Swagger</a></p>
