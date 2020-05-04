@@ -17,7 +17,7 @@
 <p><img alt="App image" src="documents/screenshots/toast.jpg"></p>
 </div>
 
-Entities:
+<h3>Entities</h3>
 
 ```kotlin
 class ResultEntity<T> (
@@ -44,7 +44,7 @@ class NewsEntity (
 )
 ```
 
-Interface:
+<h3>Interface</h3>
 
 ```kotlin
 interface NewsApi {
@@ -64,5 +64,5 @@ interface NewsApi {
 }
 ```
 
-Links:
+<h3>Links</h3>
 <p><a href='http://testtask.sebbia.com/swagger-ui.html'>Swagger</a></p>
