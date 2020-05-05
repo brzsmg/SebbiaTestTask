@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -17,7 +18,6 @@ import com.sebbia.brzsmg.testtask.adapters.NewsAdapter
 import com.sebbia.brzsmg.testtask.app
 import com.sebbia.brzsmg.testtask.models.Category
 import com.sebbia.brzsmg.testtask.models.News
-import com.sebbia.brzsmg.testtask.ui.FragmentsActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -31,7 +31,7 @@ class NewsListFragment : Fragment() {
 
     companion object {
 
-        private const val START_PAGE: Int = 1
+        private const val START_PAGE: Int = 0
         private const val END_PAGE: Int = -1
 
         fun newInstance(category : Category) : NewsListFragment {
@@ -84,7 +84,10 @@ class NewsListFragment : Fragment() {
         mvList.layoutManager = mLayoutManager
 
         mAdapter = NewsAdapter(mData) { news ->
-            (activity as FragmentsActivity).setNextFragment(NewsDetails.newInstance(mCategory, news))
+            val bundle = Bundle()
+            bundle.putSerializable("category", mCategory)
+            bundle.putSerializable("news", news)
+            findNavController().navigate(R.id.action_details, bundle)
         }
         mvList.adapter = mAdapter
 
@@ -125,7 +128,7 @@ class NewsListFragment : Fragment() {
     }
 
     fun requestNextPage() {
-        if(mPage < END_PAGE) {
+        if(mPage == END_PAGE) {
             return
         }
         if(mLoading) {
@@ -147,13 +150,14 @@ class NewsListFragment : Fragment() {
             .subscribe ({ result ->
                 if(result.isSuccessful) {
                     val list = result.body()?.list!!
-                    if(list.count() > 0) {
+                    if (list.count() > 0) {
                         val start = mData.count()
                         mData.addAll(list)
                         mAdapter.notifyItemRangeInserted(start, list.count())
                         mPage++
                     } else {
-                        Toast.makeText(activity,"Данных больше нет.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, "Данных больше нет.", Toast.LENGTH_SHORT)
+                            .show()
                         mPage = -1
                     }
                 } else {

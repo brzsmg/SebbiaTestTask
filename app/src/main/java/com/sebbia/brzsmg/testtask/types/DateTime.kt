@@ -26,6 +26,11 @@ class DateTime : Serializable {
         mSystemDate = Date()
     }
 
+    constructor(time : Long) {
+        initFormat()
+        mSystemDate = Date(time)
+    }
+
     constructor(date: String) {
         initFormat()
         mSystemDate = mFormatUTC.parse(date) as Date

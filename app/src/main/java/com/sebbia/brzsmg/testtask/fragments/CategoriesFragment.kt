@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -15,7 +16,6 @@ import com.sebbia.brzsmg.testtask.R
 import com.sebbia.brzsmg.testtask.adapters.CategoryAdapter
 import com.sebbia.brzsmg.testtask.app
 import com.sebbia.brzsmg.testtask.models.Category
-import com.sebbia.brzsmg.testtask.ui.FragmentsActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -55,7 +55,9 @@ class CategoriesFragment : Fragment() {
         mvList.layoutManager = LinearLayoutManager(activity)
 
         mAdapter = CategoryAdapter(mData) { category ->
-            (activity as FragmentsActivity).setNextFragment(NewsListFragment.newInstance(category))
+            val bundle = Bundle()
+            bundle.putSerializable("category", category)
+            findNavController().navigate(R.id.action_news, bundle)
         }
         mvList.adapter = mAdapter
 

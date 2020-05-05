@@ -15,7 +15,7 @@
 
 <h2>Screenshots</h2>
 <p>Screenshots in full resolution.</p>
-<h3>Portrait </h3>
+<h3>Portrait</h3>
 <div style="display:flex;">
 <img alt="App image" src="documents/screenshots/categories.jpg" width="30%">
 <img alt="App image" src="documents/screenshots/news_list.jpg" width="30%">
