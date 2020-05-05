@@ -29,6 +29,20 @@ import java.io.IOException
  */
 class NewsListFragment : Fragment() {
 
+    companion object {
+
+        private const val START_PAGE: Int = 1
+        private const val END_PAGE: Int = -1
+
+        fun newInstance(category : Category) : NewsListFragment {
+            val fragment = NewsListFragment()
+            val arguments = Bundle()
+            arguments.putSerializable("category", category)
+            fragment.arguments = arguments
+            return fragment
+        }
+    }
+
     //Parameters
     private lateinit var mCategory : Category
 
@@ -42,19 +56,8 @@ class NewsListFragment : Fragment() {
     //Data
     private var mData : ArrayList<News> = ArrayList()
     private var mRequest : Disposable? = null
-    private var mPage : Int = 0
+    private var mPage : Int = START_PAGE
     private var mLoading : Boolean = false
-
-
-    companion object {
-        fun newInstance(category : Category) : NewsListFragment {
-            val fragment = NewsListFragment()
-            val arguments = Bundle()
-            arguments.putSerializable("category", category)
-            fragment.arguments = arguments
-            return fragment
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,7 +91,7 @@ class NewsListFragment : Fragment() {
         mvRefreshList.setOnRefreshListener {
             mData.clear()
             mAdapter.notifyDataSetChanged()
-            mPage = 0
+            mPage = START_PAGE
             requestNextPage()
         }
 
@@ -113,7 +116,7 @@ class NewsListFragment : Fragment() {
                 }
             }
         })
-        if(mPage == 0) {
+        if(mPage == START_PAGE) {
             requestNextPage()
         } else {
             mvMessage.visibility = View.GONE
@@ -122,7 +125,7 @@ class NewsListFragment : Fragment() {
     }
 
     fun requestNextPage() {
-        if(mPage < 0) {
+        if(mPage < END_PAGE) {
             return
         }
         if(mLoading) {
@@ -132,7 +135,7 @@ class NewsListFragment : Fragment() {
 
         mvMessage.text = ""
         mvRefreshList.isRefreshing = true
-        if(mPage  < 1) {
+        if(mPage  < (START_PAGE + 1) ) {
             mvMessage.visibility = View.VISIBLE
             mvList.visibility = View.GONE
         }

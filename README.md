@@ -14,7 +14,7 @@
 <p><b>GET</b> /v1/news/details</p>
 
 <h2>Screenshots</h2>
-<p>Screenshots in full resolution</p>
+<p>Screenshots in full resolution.</p>
 <h3>Portrait </h3>
 <div style="display:flex;">
 <img alt="App image" src="documents/screenshots/categories.jpg" width="30%">
@@ -44,9 +44,9 @@ class Category(
 class News (
     val id: Int,
     val date: DateTime,
-    val fullDescription: String,
+    val title: String,
     val shortDescription: String,
-    val title: String
+    val fullDescription: String?
 )
 
 class NewsEntity (
