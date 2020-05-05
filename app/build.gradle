@@ -55,6 +55,8 @@ dependencies {
     implementation "androidx.drawerlayout:drawerlayout:1.0.0"
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.2.2'
 
     //Google Material
     implementation 'com.google.android.material:material:1.2.0-alpha06'
@@ -72,6 +74,5 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
     implementation 'com.facebook.stetho:stetho-js-rhino:1.5.1'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.2.1'
+
 }
